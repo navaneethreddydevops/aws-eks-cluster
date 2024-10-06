@@ -6,6 +6,10 @@ aws-eks-cluster
 eksctl create cluster -f ekscluster.yaml
 ```
 
+```
+aws eks update-kubeconfig --region us-east-1 --name eksctl-cluster
+```
+
 ## aws loadbalancer-controller
 
 ```bash
