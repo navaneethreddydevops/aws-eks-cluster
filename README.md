@@ -38,5 +38,16 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 helm uninstall aws-load-balancer-controller -n kube-system
 ```
 
+<https://repost.aws/knowledge-center/amazon-eks-cluster-access>
 
-https://repost.aws/knowledge-center/amazon-eks-cluster-access
+```bash
+helm install --values values.yaml loki grafana/loki
+helm install --values values.yaml loki grafana/loki --dry-run --debug > output.yaml
+```
+
+## Local modified chart
+
+```bash
+helm pull grafana/loki --untar
+helm install --values values.yaml loki ./loki --dry-run --debug > output.yaml
+```
