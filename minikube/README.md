@@ -12,7 +12,8 @@ kubectl get pods -n loki-stack
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 
-helm upgrade --install grafana-agent --namespace=loki grafana/grafana-agent --values grafana-values.yaml
+helm upgrade --install grafana-agent --namespace=loki grafana/grafana-agent --values minikube/grafana-values.yaml --create-namespace
+kubectl get pods -n loki
 
 
 kubectl port-forward svc/loki-grafana 3000:80 -n loki-stack
