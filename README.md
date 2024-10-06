@@ -2,11 +2,11 @@
 
 aws-eks-cluster
 
-```
+```bash
 eksctl create cluster -f ekscluster.yaml
 ```
 
-```
+```bash
 aws eks update-kubeconfig --region us-east-1 --name eksctl-cluster
 ```
 

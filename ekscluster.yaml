@@ -7,8 +7,8 @@ metadata:
 nodeGroups:
   - name: nodegroup-1
     instanceType: t2.micro
-    desiredCapacity: 4 # Adjusted to match minSize
-    minSize: 4
+    desiredCapacity: 2 # Adjusted to match minSize
+    minSize: 2
     maxSize: 6
     volumeSize: 20
     volumeType: gp3
@@ -24,8 +24,8 @@ nodeGroups:
 
   - name: nodegroup-2
     instanceType: t3.micro
-    desiredCapacity: 4 # Adjusted to match minSize
-    minSize: 4
+    desiredCapacity: 2 # Adjusted to match minSize
+    minSize: 2
     maxSize: 6
     privateNetworking: true
     volumeSize: 20
@@ -97,13 +97,20 @@ addons:
 
 managedNodeGroups:
   - name: managed-nodegroup-1
-    instanceType: t3.micro
-    minSize: 4
+    instanceType:
+      [
+        "c3.large",
+        "c4.large",
+        "c5.large",
+        "c5d.large",
+        "c5n.large",
+        "c5a.large",
+      ]
+    minSize: 2
     maxSize: 6
     desiredCapacity: 4
     privateNetworking: true
-    labels:
-      lifecycle: ec2-autoscaler
+    spot: true
     iam:
       withAddonPolicies:
         ebs: true
