@@ -67,6 +67,11 @@ iam:
         namespace: kube-system
       attachPolicyARNs:
         - arn:aws:iam::aws:policy/AmazonRoute53FullAccess
+    - metadata:
+        name: aws-load-balancer-controller
+        namespace: kube-system
+      wellKnownPolicies:
+        awsLoadBalancerController: true
 
 addons:
   - name: vpc-cni
