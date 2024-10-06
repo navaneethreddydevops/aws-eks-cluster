@@ -2,6 +2,10 @@
 
 aws-eks-cluster
 
+```
+eksctl create cluster -f ekscluster.yaml
+```
+
 ## aws loadbalancer-controller
 
 ```bash
