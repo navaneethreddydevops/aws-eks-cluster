@@ -99,11 +99,11 @@ addons:
       - arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy
   - name: aws-mountpoint-s3-csi-driver
     version: latest
-  - name: eks-pod-identity-webhook
+  - name: eks-pod-identity-agent
     version: latest
 
 managedNodeGroups:
-  - name: managed-nodegroup-1
+  - name: managed-nodegroup-spot
     instanceTypes:
       ["t3.medium", "t3a.medium", "m5.large", "c5.large", "c5a.large"]
     desiredCapacity: 2
