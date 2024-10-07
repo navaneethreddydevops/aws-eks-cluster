@@ -3,12 +3,14 @@ kind: ClusterConfig
 metadata:
   name: eksctl-cluster
   region: us-east-1
+  tags:
+    karpenter.sh/discovery: eksctl-cluster
 
 nodeGroups:
   - name: nodegroup-1
     instanceType: t2.micro
-    desiredCapacity: 4 # Adjusted to match minSize
-    minSize: 4
+    desiredCapacity: 2
+    minSize: 2
     maxSize: 6
     volumeSize: 20
     volumeType: gp3
@@ -16,16 +18,11 @@ nodeGroups:
       allow: false
     labels:
       lifecycle: OnDemand
-    iam:
-      withAddonPolicies:
-        ebs: true
-        fsx: true
-        efs: true
 
   - name: nodegroup-2
     instanceType: t3.micro
-    desiredCapacity: 4 # Adjusted to match minSize
-    minSize: 4
+    desiredCapacity: 2
+    minSize: 2
     maxSize: 6
     privateNetworking: true
     volumeSize: 20
@@ -34,11 +31,6 @@ nodeGroups:
       allow: false
     labels:
       lifecycle: OnDemand
-    iam:
-      withAddonPolicies:
-        ebs: true
-        fsx: true
-        efs: true
 
 cloudWatch:
   clusterLogging:
@@ -63,7 +55,7 @@ iam:
       attachPolicyARNs:
         - arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy
     - metadata:
-        name: external-dns-sa
+        name: external-dns
         namespace: kube-system
       attachPolicyARNs:
         - arn:aws:iam::aws:policy/AmazonRoute53FullAccess
@@ -72,6 +64,11 @@ iam:
         namespace: kube-system
       wellKnownPolicies:
         awsLoadBalancerController: true
+
+karpenter:
+  version: "v0.20.0"
+  createServiceAccount: true
+  withSpotInterruptionQueue: true
 
 addons:
   - name: vpc-cni
@@ -86,26 +83,21 @@ addons:
     version: latest
     attachPolicyARNs:
       - arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
-  - name: efs-csi-driver
+  - name: aws-efs-csi-driver
     version: latest
     attachPolicyARNs:
       - arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy
-  - name: s3-csi-driver
+  - name: aws-mountpoint-s3-csi-driver
     version: latest
-  - name: eks-pod-identity-webhook
+  - name: eks-pod-identity-agent
     version: latest
 
 managedNodeGroups:
-  - name: managed-nodegroup-1
-    instanceType: t3.micro
-    minSize: 4
+  - name: managed-nodegroup-spot
+    instanceTypes:
+      ["t3.medium", "t3a.medium", "m5.large", "c5.large", "c5a.large"]
+    desiredCapacity: 2
+    minSize: 1
     maxSize: 6
-    desiredCapacity: 4
     privateNetworking: true
-    labels:
-      lifecycle: ec2-autoscaler
-    iam:
-      withAddonPolicies:
-        ebs: true
-        fsx: true
-        efs: true
+    spot: true
